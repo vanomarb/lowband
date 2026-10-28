@@ -8,7 +8,7 @@ import WebPlayer from "./web/WebPlayer";
 
 /**
  * Lowband's website is the web player itself, not a marketing page: a desktop listening app that shares the
- * phone app's catalogue, reducer and audio engine. At phone width it links to the phone app.
+ * phone app's catalogue, reducer and audio engine. On phones, app/page.tsx shows the phone app instead.
  */
 export default function Landing({ appHref }: LandingProps) {
   return <WebPlayer appHref={appHref} />;

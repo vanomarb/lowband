@@ -1,15 +1,15 @@
 /**
- * Runs in <head> before the first paint, so there's no flash of the wrong layout.
+ * Runs in <head> before the first paint and marks phones with data-device="phone" on <html>, so the home
+ * page can show the phone app instead of the web player at the same address (see app/page.tsx).
  *
  * A phone is a touch screen narrower than 600 CSS px. "Desktop site" mode makes this hard to see: the
  * browser lays the page out ~980px wide, ignores the viewport meta tag, and zooms out to fit. So the
  * real width is taken from several sources and the smallest wins: the screen size, and the visible
  * width multiplied by the zoom (980px shown at 0.42x is a 412px phone). If the zoom isn't known yet
- * when this runs, it checks again once the page has loaded.
+ * when this runs, it checks again once the page has loaded and fires "lowband:device".
  *
- * - On a phone, the web player sends you to the phone app, unless the URL asks for the web player (?web).
- * - On the phone app in "Desktop site" mode, the page is zoomed back to the phone's real width.
- *   native.css divides the app's full-screen height by the same --lb-zoom so it still fits the screen.
+ * In "Desktop site" mode the page is also zoomed back to the phone's real width; native.css divides the
+ * phone app's full-screen height by the same --lb-zoom so it still fits the screen.
  */
 export const phoneScript = `(function () {
   function phoneWidth() {
@@ -23,17 +23,14 @@ export const phoneScript = `(function () {
   function apply() {
     var width = phoneWidth();
     if (!width) return false;
-    var path = location.pathname;
-    if (!/\\/app\\/?$/.test(path)) {
-      if (!/[?&]web\\b/.test(location.search)) location.replace(path.replace(/\\/?$/, '/') + 'app/' + location.hash);
-      return true;
-    }
+    var root = document.documentElement;
+    root.dataset.device = 'phone';
     var zoom = innerWidth / width;
     if (zoom > 1.2) {
-      var root = document.documentElement;
       root.style.zoom = String(zoom);
       root.style.setProperty('--lb-zoom', String(zoom));
     }
+    dispatchEvent(new Event('lowband:device'));
     return true;
   }
   try {
