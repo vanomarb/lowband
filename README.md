@@ -35,6 +35,7 @@ Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`
 - Album pages with the tracklist in disc order, and artist pages with top songs and albums; reach them from search, the track menu ("Go to album", "Go to artist") or the artist name in the full player
 - Liked songs, recently played, and playlists you can create, rename, delete and edit, with undo
 - Mini-player that opens a full player with Up next, volume and a sleep timer that fades out
+- Phone gestures: drag the full player or any sheet down to close it, and the system back gesture steps back through screens, the player and sheets instead of leaving the app
 - Settings with Connected services as concept toggles: nothing is signed in
 
 State lives in memory and resets when you reload.

@@ -6,6 +6,7 @@ import "./player.css";
 import "./screens.css";
 import { useEffect, useRef } from "react";
 import type { DemoProps } from "./types";
+import { useBackGesture } from "./hooks/useBackGesture";
 import { inertProps } from "./components/Bits";
 import { FullPlayer } from "./components/FullPlayer";
 import { MiniPlayer } from "./components/MiniPlayer";
@@ -29,6 +30,7 @@ function App({ today, homeHref }: { today: string; homeHref: string }) {
   const last = useRef({ open: false, key: "" });
   const viewKey = viewKeyOf(s);
   const tint = s.current ? paletteOf(s.current) : "magenta";
+  useBackGesture(s, d);
 
   // Focus: the new screen's title after navigation, the close button when the player opens, the mini-player when it closes.
   useEffect(() => {

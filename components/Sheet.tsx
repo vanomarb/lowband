@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { useDragToClose } from "../hooks/useDragToClose";
+import { useLayout } from "./Page";
 
 type Props = { label: string; onClose: () => void; children: ReactNode; /** "action" is the compact iOS action sheet. */ variant?: "sheet" | "action" };
 
@@ -8,12 +10,13 @@ const FOCUSABLE = 'button:not(:disabled), a[href], input:not(:disabled), [tabind
 
 /**
  * A bottom sheet with a grabber and a dimmed backdrop (a centred dialog in the web player). Traps focus,
- * closes on Escape or a backdrop tap, and gives focus back to whatever opened it.
+ * closes on Escape, a backdrop tap or a downward drag on phones, and gives focus back to whatever opened it.
  */
 export function Sheet({ label, onClose, children, variant = "sheet" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const close = useRef(onClose);
   useEffect(() => { close.current = onClose; });
+  useDragToClose(ref, onClose, useLayout() === "phone");
 
   useEffect(() => {
     const opener = document.activeElement as HTMLElement | null;

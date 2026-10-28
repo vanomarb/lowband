@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
 /** Screens are shared by the phone app and the web player; the chrome around them is not. */
@@ -9,7 +9,7 @@ export const useLayout = () => useContext(LayoutContext);
 
 type Props = {
   title: string;
-  /** Root screens show a 34px large title in the content that collapses into the bar on scroll. */
+  /** Root screens show a 34px large title that scrolls away with the content, with no bar above it. */
   large?: boolean;
   /** Label of the screen underneath, for the back button on pushed screens. */
   back?: string;
@@ -19,13 +19,12 @@ type Props = {
 };
 
 /**
- * Phone: a fixed 44px navigation bar under the status bar, and the only scrolling region below it. The large
- * title scrolls with the content; once it is gone, the centred 17px title fades into the bar (iOS behaviour).
+ * Phone: the only scrolling region of the screen. Root screens open with a large title (and any actions)
+ * that scrolls away with the content; pushed screens keep a fixed 44px bar with the back button and title.
  * Web: a plain header inside the web player's main column.
  */
 export function Page({ title, large = true, back, onBack, actions, children }: Props) {
   const layout = useLayout();
-  const [collapsed, setCollapsed] = useState(!large);
   const backBtn = back && onBack && (
     <button type="button" className="lb-nav-back" onClick={onBack}><Icon name="back" size={22} weight="bold" /><span>{back}</span></button>
   );
@@ -45,13 +44,20 @@ export function Page({ title, large = true, back, onBack, actions, children }: P
 
   return (
     <div className="lb-page">
-      <header className={`lb-nav ${collapsed ? "is-collapsed" : ""}`}>
-        <div className="lb-nav-lead">{backBtn}</div>
-        {large ? <p className="lb-nav-title" aria-hidden="true">{title}</p> : <h1 className="lb-nav-title" tabIndex={-1} data-view-focus>{title}</h1>}
-        <div className="lb-nav-trail">{actions}</div>
-      </header>
-      <div className="lb-scroll" onScroll={large ? (e) => setCollapsed(e.currentTarget.scrollTop > 36) : undefined}>
-        {large && <h1 className="lb-large" tabIndex={-1} data-view-focus>{title}</h1>}
+      {!large && (
+        <header className="lb-nav is-collapsed">
+          <div className="lb-nav-lead">{backBtn}</div>
+          <h1 className="lb-nav-title" tabIndex={-1} data-view-focus>{title}</h1>
+          <div className="lb-nav-trail">{actions}</div>
+        </header>
+      )}
+      <div className="lb-scroll">
+        {large && (
+          <div className="lb-large-row">
+            <h1 className="lb-large" tabIndex={-1} data-view-focus>{title}</h1>
+            {actions}
+          </div>
+        )}
         {children}
       </div>
     </div>

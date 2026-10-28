@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
+import { useRef, type CSSProperties } from "react";
 import { clock, paletteOf, PREVIEW_LABEL, SOURCE_NAME } from "../data/catalog";
-import { useSwipe } from "../hooks/useSwipe";
+import { useDragToClose } from "../hooks/useDragToClose";
 import { currentDur } from "../state/playback";
 import type { D, State } from "../state/types";
 import { Art } from "./Art";
@@ -11,8 +11,9 @@ import { QueueList } from "./QueueList";
 /** The phone's Now Playing sheet: artwork (or Up next), title, scrubber, transport, volume and tools. */
 export function FullPlayer({ s, d }: { s: State; d: D }) {
   const t = s.current ? s.tracks[s.current] : undefined;
-  const swipe = useSwipe(undefined, () => d({ type: "PLAYER", open: false }));
   const open = s.playerOpen && Boolean(t);
+  const panel = useRef<HTMLElement>(null);
+  useDragToClose(panel, () => d({ type: "PLAYER", open: false }), open);
   if (!t) return <div className="lb-player" aria-hidden="true" {...inertProps(true)} />;
   const dur = currentDur(s);
   const buffering = s.playing && s.buffering;
@@ -21,10 +22,10 @@ export function FullPlayer({ s, d }: { s: State; d: D }) {
   const queue = s.playerView === "queue";
   const sleepOn = s.sleep.mode !== "off";
   return (
-    <section className={`lb-player lb-pal--${paletteOf(t.id)} ${open ? "is-open" : ""} ${s.playing ? "is-playing" : ""}`}
+    <section ref={panel} className={`lb-player lb-pal--${paletteOf(t.id)} ${open ? "is-open" : ""} ${s.playing ? "is-playing" : ""}`}
       role="dialog" aria-modal="true" aria-label="Now playing" aria-hidden={open ? undefined : true} {...inertProps(!open)}>
       <div className="lb-player-bg" aria-hidden="true"><Art track={t} px={100} /></div>
-      <header className="lb-player-top" {...swipe}>
+      <header className="lb-player-top">
         <button type="button" className="lb-icon-btn" aria-label="Close player" onClick={() => d({ type: "PLAYER", open: false })}><Icon name="down" size={26} weight="bold" /></button>
         <span className="lb-grabber" aria-hidden="true" />
         <button type="button" className="lb-icon-btn" aria-label={`More options for ${t.title}`} onClick={() => d({ type: "SHEET", sheet: { kind: "track", id: t.id } })}><Icon name="more" size={26} weight="bold" /></button>
