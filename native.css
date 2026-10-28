@@ -13,6 +13,11 @@
   background: radial-gradient(120% 40% at 50% -6%, color-mix(in srgb, var(--lb-a) 20%, transparent), transparent 62%), var(--lb-bg);
 }
 .lowband-demo.lb-app.has-mini { --dock: calc(var(--tabbar) + 64px); }
+/* Like a native app, the phone shell scrolls by touch with no visible scrollbars, even on desktop browsers. */
+.lowband-demo.lb-app,
+.lowband-demo.lb-app * { scrollbar-width: none; }
+.lowband-demo.lb-app::-webkit-scrollbar,
+.lowband-demo.lb-app ::-webkit-scrollbar { display: none; }
 .lowband-demo.lb-app input { user-select: text; -webkit-user-select: text; }
 .lowband-demo .lb-main { position: absolute; inset: 0; }
 
