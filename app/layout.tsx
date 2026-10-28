@@ -1,8 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import * as fonts from "../font";
 import { lowband as meta } from "../meta";
 import { phoneScript } from "../phone";
 import "./globals.css";
+
+// An app, not a document: no pinch zoom, and the page reaches under the notch so the safe-area insets work.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: `${meta.name} · ${meta.industry}`,

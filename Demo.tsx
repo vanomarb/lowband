@@ -37,8 +37,10 @@ function App({ today, homeHref }: { today: string; homeHref: string }) {
   useEffect(() => {
     const prev = last.current;
     const root = rootRef.current;
-    if (s.playerOpen && !prev.open) root?.querySelector<HTMLElement>(".lb-player-top button")?.focus();
-    else if (!s.playerOpen && prev.open) root?.querySelector<HTMLElement>(".lb-mini-open")?.focus();
+    // preventScroll: the player is still below the screen while it animates in, and focusing it would scroll the
+    // whole app up to reveal it, then back (the open "bounce").
+    if (s.playerOpen && !prev.open) root?.querySelector<HTMLElement>(".lb-player-top button")?.focus({ preventScroll: true });
+    else if (!s.playerOpen && prev.open) root?.querySelector<HTMLElement>(".lb-mini-open")?.focus({ preventScroll: true });
     else if (prev.key && prev.key !== viewKey) root?.querySelector<HTMLElement>(".lb-main [data-view-focus]")?.focus({ preventScroll: true });
     last.current = { open: s.playerOpen, key: viewKey };
   }, [s.playerOpen, viewKey]);

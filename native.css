@@ -8,7 +8,11 @@
   --dock: var(--tabbar);
   /* --lb-zoom is set by phone.ts when a phone's "Desktop site" mode has to be zoomed back to phone size. */
   height: calc((100dvh - var(--host-bar, 0px)) / var(--lb-zoom, 1));
-  overflow: hidden;
+  /* clip, not hidden: a hidden overflow can still be scrolled by focus() or scrollIntoView, which made the shell
+     jump when an off-screen panel was focused. Only each screen's own region scrolls. */
+  overflow: clip;
+  /* No double-tap zoom (iOS ignores user-scalable=no); taps also respond without the 300ms zoom delay. */
+  touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
   background: radial-gradient(120% 40% at 50% -6%, color-mix(in srgb, var(--lb-a) 20%, transparent), transparent 62%), var(--lb-bg);
@@ -30,16 +34,17 @@
   animation: lb-fade 0.2s ease both;
 }
 .lowband-demo .lb-nav {
-  position: absolute; z-index: 10; inset: 0 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  position: absolute; z-index: 10; inset: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center;
   height: calc(var(--sa-t) + 44px); padding: var(--sa-t) 8px 0; border-bottom: 0.5px solid transparent;
   transition: background-color 0.2s, border-color 0.2s;
 }
 .lowband-demo .lb-nav.is-collapsed { background: rgb(12 7 16 / 0.82); border-bottom-color: var(--lb-sep); -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6); }
 .lowband-demo .lb-nav-title { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 17px; line-height: 22px; font-weight: 600; text-align: center; opacity: 0; transition: opacity 0.2s; }
 .lowband-demo .lb-nav.is-collapsed .lb-nav-title { opacity: 1; }
-.lowband-demo .lb-nav-lead { justify-self: start; min-width: 0; }
+/* Fill the column so a long back label truncates instead of running under the title. */
+.lowband-demo .lb-nav-lead { justify-self: stretch; min-width: 0; overflow: hidden; }
 .lowband-demo .lb-nav-trail { justify-self: end; display: flex; align-items: center; }
-.lowband-demo .lb-nav-back { display: inline-flex; align-items: center; gap: 0; max-width: 140px; min-height: 44px; padding: 0 8px 0 0; border: 0; background: none; color: var(--lb-t); font-size: 17px; }
+.lowband-demo .lb-nav-back { display: inline-flex; align-items: center; gap: 0; max-width: min(140px, 100%); min-height: 44px; padding: 0 8px 0 0; border: 0; background: none; color: var(--lb-t); font-size: 17px; }
 .lowband-demo .lb-nav-back span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lowband-demo .lb-nav-back:active { opacity: 0.5; }
 .lowband-demo .lb-large-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-right: 8px; }
@@ -63,7 +68,7 @@
 .lowband-demo .lb-row-num { width: 20px; flex: none; color: var(--lb-muted); font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
 .lowband-demo .lb-list:has(.lb-row-num) > li + li::before { left: 108px; }
 .lowband-demo .lb-row-art { width: 48px; flex: none; border-radius: 6px; }
-.lowband-demo .lb-row-text { display: grid; flex: 1; min-width: 0; }
+.lowband-demo .lb-row-text { display: grid; grid-template-columns: minmax(0, 1fr); flex: 1; min-width: 0; }
 .lowband-demo .lb-row-text :is(strong, small) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lowband-demo .lb-row-text strong { font-size: 17px; line-height: 22px; font-weight: 500; }
 .lowband-demo .lb-row-text small { color: var(--lb-muted); font-size: 15px; line-height: 20px; }
@@ -83,7 +88,7 @@
 .lowband-demo .lb-cell-icon.is-orchid { --lb-t: #cda3ff; } .lowband-demo .lb-cell-icon.is-aqua { --lb-t: #7be6d8; }
 .lowband-demo .lb-cell-icon.is-coral { --lb-t: #ff9585; } .lowband-demo .lb-cell-icon.is-amber { --lb-t: #ffc95e; } .lowband-demo .lb-cell-icon.is-magenta { --lb-t: #ff7cbb; }
 .lowband-demo .lb-cell-label { flex: 1; min-width: 0; font-size: 17px; line-height: 22px; }
-.lowband-demo .lb-cell-detail { color: var(--lb-muted); font-size: 17px; line-height: 22px; text-align: right; }
+.lowband-demo .lb-cell-detail { flex: 0 1 auto; min-width: 0; max-width: 60%; overflow: hidden; color: var(--lb-muted); font-size: 17px; line-height: 22px; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
 .lowband-demo .lb-cell-stack { display: grid; flex: 1; gap: 2px; }
 .lowband-demo .lb-cell-stack small { color: var(--lb-muted); font-size: 13px; line-height: 18px; }
 .lowband-demo .lb-chev { flex: none; color: var(--lb-edge); }
@@ -110,13 +115,15 @@
 .lowband-demo .lb-sheet {
   position: absolute; inset: auto 0 0; max-height: calc(100% - var(--sa-t, 0px) - 24px); overflow-y: auto; overscroll-behavior: contain;
   padding: 6px 0 calc(var(--sa-b, 0px) + 12px); border-radius: 14px 14px 0 0; background: var(--lb-surface); box-shadow: 0 -10px 40px rgb(0 0 0 / 0.5);
-  animation: lb-up 0.32s var(--lb-ease) both;
+  /* backwards, not both: a held final frame would override the inline transform useDragToClose sets, so the
+     sheet would not follow the finger. */
+  animation: lb-up 0.32s var(--lb-ease) backwards;
 }
 .lowband-demo .lb-sheet--action { inset: auto 8px calc(var(--sa-b, 0px) + 8px); padding: 6px 0 8px; border-radius: 14px; }
 .lowband-demo .lb-grabber { display: block; width: 36px; height: 5px; margin: 0 auto 8px; border-radius: 3px; background: var(--lb-edge); opacity: 0.6; }
 .lowband-demo .lb-sheet-title { padding: 4px 16px 0; font-size: 20px; line-height: 25px; text-align: center; }
 .lowband-demo .lb-sheet-sub { padding: 4px 16px 8px; color: var(--lb-muted); font-size: 15px; line-height: 20px; text-align: center; }
-.lowband-demo .lb-sheet-bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 8px 8px; }
+.lowband-demo .lb-sheet-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; padding: 0 8px 8px; }
 .lowband-demo .lb-sheet-bar h2 { font-size: 17px; line-height: 22px; font-weight: 600; }
 .lowband-demo .lb-sheet-bar .lb-text-btn:last-child { justify-self: end; }
 .lowband-demo .lb-sheet-bar .lb-text-btn:first-child { justify-self: start; }
