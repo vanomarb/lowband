@@ -10,6 +10,16 @@ Lowband is a concept for a music library that sits above Spotify, YouTube Music 
 
 This demo is a phone app and a desktop web player. It searches and plays 30-second previews from the public [iTunes Search API](https://performance-partners.apple.com/search-api) as a stand-in for the connected services. Connecting Spotify, YouTube Music or Apple Music is shown as a labelled concept, and no account is ever connected.
 
+## Screenshots
+
+![The desktop web player: library rail, Listen Now with today's pick and recently played, the Up next panel and the player bar](docs/screenshots/web-player.png)
+
+| Listen Now | Full player | Where it plays |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Last Last by Burna Boy, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as sped up or cover"> |
+
+Captured from the live demo. Album artwork belongs to its owners.
+
 ## What it ships with
 
 - **Web player** at `/`: `Landing.tsx` renders `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. At phone width it links to the phone app.
