@@ -1,0 +1,84 @@
+/* Screen content shared by the phone app and the web player. Scoped to .lowband-demo. */
+
+/* Home */
+.lowband-demo .lb-dateline { padding: 0 16px; color: var(--lb-muted); font-size: 13px; line-height: 18px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.lowband-demo .lb-dateline span { color: var(--lb-t); }
+.lowband-demo .lb-hero {
+  position: relative; display: grid; width: calc(100% - 32px); margin: 12px 16px 0; padding: 0; overflow: hidden; border: 0; border-radius: 16px;
+  background: var(--lb-surface); text-align: left; transition: transform 0.12s var(--lb-ease);
+}
+.lowband-demo .lb-hero:active { transform: scale(0.98); }
+.lowband-demo .lb-hero-art { grid-area: 1 / 1; aspect-ratio: 4 / 3; border-radius: 0; }
+.lowband-demo .lb-hero-art .lb-art-img { object-position: 50% 30%; }
+/* The scrim starts high: cover art often has its own lettering, and the hero copy must win over it. */
+.lowband-demo .lb-hero::after { content: ""; grid-area: 1 / 1; background: linear-gradient(180deg, rgb(12 7 16 / 0.1) 0%, rgb(12 7 16 / 0.6) 40%, rgb(12 7 16 / 0.96) 72%); }
+.lowband-demo .lb-hero-text { z-index: 1; grid-area: 1 / 1; align-self: end; display: grid; gap: 2px; padding: 16px 16px 64px; }
+.lowband-demo .lb-hero-text small { color: var(--lb-t); font-size: 12px; line-height: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.lowband-demo .lb-hero-text strong { font-family: var(--lb-display); font-size: 22px; line-height: 28px; font-weight: 700; }
+.lowband-demo .lb-hero-text span { color: #e3d8ee; font-size: 15px; line-height: 20px; }
+.lowband-demo .lb-hero-play { z-index: 1; grid-area: 1 / 1; align-self: end; justify-self: start; display: inline-flex; align-items: center; gap: 6px; margin: 0 16px 16px; padding: 8px 16px; border-radius: 999px; background: linear-gradient(100deg, var(--lb-a), var(--lb-b)); color: var(--lb-on); font-size: 15px; line-height: 20px; font-weight: 700; }
+
+.lowband-demo .lb-shelf { display: flex; gap: 12px; padding: 0 16px 4px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 16px; scrollbar-width: none; overscroll-behavior-x: contain; }
+.lowband-demo .lb-shelf::-webkit-scrollbar { display: none; }
+.lowband-demo .lb-shelf > li { flex: none; width: 152px; scroll-snap-align: start; }
+.lowband-demo .lb-card { display: grid; gap: 2px; width: 100%; padding: 0; border: 0; background: none; text-align: left; }
+.lowband-demo .lb-card-art { position: relative; display: block; margin-bottom: 6px; transition: transform 0.12s var(--lb-ease); }
+.lowband-demo .lb-card:active .lb-card-art { transform: scale(0.96); }
+.lowband-demo .lb-card-art .lb-art, .lowband-demo .lb-card-art .lb-mosaic { border-radius: 10px; }
+.lowband-demo .lb-card-play { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgb(12 7 16 / 0.7); color: #fff; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.lowband-demo .lb-card :is(strong, small) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lowband-demo .lb-card strong { font-size: 15px; line-height: 20px; font-weight: 500; }
+.lowband-demo .lb-card small { color: var(--lb-muted); font-size: 13px; line-height: 18px; }
+
+/* Search */
+.lowband-demo .lb-search { position: relative; display: flex; align-items: center; gap: 6px; height: 36px; margin: 0 16px; padding: 0 8px; border-radius: 10px; background: var(--lb-raise); color: var(--lb-muted); }
+.lowband-demo .lb-search input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; color: var(--lb-text); font-size: 17px; outline: none; }
+.lowband-demo .lb-search input::placeholder { color: var(--lb-muted); }
+.lowband-demo .lb-search input::-webkit-search-cancel-button { display: none; }
+.lowband-demo .lb-search:focus-within { box-shadow: 0 0 0 2px var(--lb-t); }
+.lowband-demo .lb-search-clear { position: relative; display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 50%; background: var(--lb-muted); color: var(--lb-bg); }
+.lowband-demo .lb-search-clear::before { content: ""; position: absolute; inset: -13px; }
+.lowband-demo .lb-cats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0 16px; }
+.lowband-demo .lb-cat {
+  position: relative; display: flex; align-items: flex-start; width: 100%; height: 100px; padding: 12px; overflow: hidden; border: 0; border-radius: 12px;
+  background: linear-gradient(135deg, var(--lb-a), var(--lb-b)); color: var(--lb-on); text-align: left; font-size: 17px; line-height: 22px; font-weight: 700;
+  transition: transform 0.12s var(--lb-ease);
+}
+.lowband-demo .lb-cat:active { transform: scale(0.96); }
+.lowband-demo .lb-cat svg { position: absolute; right: -4px; bottom: -6px; transform: rotate(-12deg); opacity: 0.85; }
+.lowband-demo .lb-banner { display: flex; gap: 8px; margin: 0 16px 8px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, #ffb020 16%, var(--lb-surface)); font-size: 15px; line-height: 20px; }
+.lowband-demo .lb-banner svg { flex: none; margin-top: 1px; color: #ffc95e; }
+.lowband-demo .is-stale { opacity: 0.55; transition: opacity 0.2s; }
+
+/* Library */
+.lowband-demo .lb-pl-list > li + li::before { left: 84px; }
+.lowband-demo .lb-pl-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 76px; padding: 8px 16px; border: 0; background: none; text-align: left; transition: background-color 0.12s; }
+.lowband-demo .lb-pl-art, .lowband-demo .lb-pl-new { width: 60px; flex: none; }
+.lowband-demo .lb-pl-new { display: grid; place-items: center; height: 60px; border-radius: 8px; background: var(--lb-raise); color: var(--lb-t); }
+.lowband-demo .lb-cell-icon + .lb-cell-label { font-weight: 400; }
+
+/* Collection (playlist, liked, recent) */
+.lowband-demo .lb-coll-head { display: grid; justify-items: center; gap: 4px; padding: 8px 16px 16px; text-align: center; }
+.lowband-demo .lb-coll-art { width: 220px; border-radius: 12px; box-shadow: 0 16px 40px rgb(0 0 0 / 0.45); }
+.lowband-demo .lb-coll-icon { display: grid; place-items: center; aspect-ratio: 1; background: linear-gradient(135deg, var(--lb-a), var(--lb-b)); color: var(--lb-on); }
+.lowband-demo .lb-coll-icon.is-recent { background: linear-gradient(135deg, #2fd6c4, #5c9bff); color: #04201c; }
+.lowband-demo .lb-coll-head h2 { margin-top: 12px; font-size: 22px; line-height: 28px; }
+.lowband-demo .lb-coll-head p { color: var(--lb-muted); font-size: 15px; line-height: 20px; }
+.lowband-demo .lb-coll-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 12px; }
+
+/* Search scope: iOS segmented control. */
+.lowband-demo .lb-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 4px 16px 12px; padding: 2px; border-radius: 9px; background: rgb(255 255 255 / 0.08); }
+.lowband-demo .lb-seg button { min-height: 32px; border: 0; border-radius: 7px; background: none; color: var(--lb-t); font-size: 13px; line-height: 18px; font-weight: 500; transition: background-color 0.15s var(--lb-ease); }
+.lowband-demo .lb-seg button.is-on { background: rgb(255 255 255 / 0.18); font-weight: 600; box-shadow: 0 2px 6px rgb(0 0 0 / 0.25); }
+
+/* Album and artist rows drill in: chevron instead of More. */
+.lowband-demo .lb-row-nav { padding-right: 16px; }
+.lowband-demo .lb-row-chev { flex: none; color: var(--lb-muted); opacity: 0.7; }
+.lowband-demo .lb-row-text small { display: flex; align-items: center; gap: 4px; }
+.lowband-demo .lb-monogram { display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; background: linear-gradient(140deg, var(--lb-a), var(--lb-b)); color: var(--lb-on); font-family: var(--lb-display); font-size: 20px; font-weight: 700; }
+.lowband-demo .lb-coll-art.is-round, .lowband-demo .lb-coll-art.is-round .lb-art-img { border-radius: 50%; }
+.lowband-demo .lb-coll-art.lb-monogram { font-size: 72px; }
+.lowband-demo .lb-link-btn { min-height: 28px; padding: 0 4px; border: 0; background: none; color: var(--lb-t); font-size: 17px; line-height: 22px; font-weight: 500; }
+.lowband-demo .lb-link-btn:active { opacity: 0.6; }
+.lowband-demo .lb-list.is-album .lb-row-main { min-height: 48px; }
+.lowband-demo .lb-list.is-album > li + li::before { left: 52px; }

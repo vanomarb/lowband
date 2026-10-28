@@ -1,0 +1,130 @@
+/* Lowband theme. Everything is scoped under .lowband-demo / .lowband-thumb.
+ *
+ * Mood: late-night listening. Ink-plum ground, magenta-to-coral accent, re-tinted per track (200ms).
+ * WCAG AA audited pairs (contrast ratios, computed):
+ *   text #f7effb on bg #0c0710 17.7 | on surface #170f20 16.6 | on raise #231a32 14.8
+ *   muted #c2b5d1 on bg 10.3 | on surface 9.6 | on raise 8.6
+ *   accent text tints on surface: magenta #ff7cbb 7.9, coral #ff9585 8.8, orchid #cda3ff 9.1, amber #ffc95e 12.2, aqua #7be6d8 12.6
+ *   ink on accent fills: magenta 5.9, coral 6.6, orchid 6.1, amber 9.5, aqua 9.4
+ *   danger #ff9c9c on surface 8.3
+ */
+@property --lb-a { syntax: "<color>"; inherits: true; initial-value: #ff3d9a; }
+@property --lb-b { syntax: "<color>"; inherits: true; initial-value: #ff7a59; }
+@property --lb-t { syntax: "<color>"; inherits: true; initial-value: #ff7cbb; }
+
+.lowband-demo,
+.lowband-thumb {
+  --lb-bg: #0c0710;
+  --lb-surface: #170f20;
+  --lb-raise: #231a32;
+  --lb-text: #f7effb;
+  --lb-muted: #c2b5d1;
+  --lb-edge: #8b7aa0;
+  --lb-line: #3b2d4e;
+  --lb-sep: rgb(194 181 209 / 0.18);
+  --lb-danger: #ff9c9c;
+  --lb-a: #ff3d9a;
+  --lb-b: #ff7a59;
+  --lb-t: #ff7cbb;
+  --lb-on: #1d0614;
+  --lb-font: var(--font-lowband), Sora, system-ui, sans-serif;
+  --lb-display: var(--font-lowband-display), Unbounded, var(--lb-font);
+  --lb-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  color: var(--lb-text);
+  font-family: var(--lb-font);
+  font-size: 17px;
+  line-height: 22px;
+}
+:is(.lowband-demo, .lowband-thumb, .lowband-demo *, .lowband-thumb *).lb-pal--magenta { --lb-a: #ff3d9a; --lb-b: #ff7a59; --lb-t: #ff7cbb; --lb-on: #1d0614; }
+:is(.lowband-demo, .lowband-thumb, .lowband-demo *, .lowband-thumb *).lb-pal--coral { --lb-a: #ff6b57; --lb-b: #ffa25c; --lb-t: #ff9585; --lb-on: #2a0a06; }
+:is(.lowband-demo, .lowband-thumb, .lowband-demo *, .lowband-thumb *).lb-pal--orchid { --lb-a: #b070ff; --lb-b: #ff5fa8; --lb-t: #cda3ff; --lb-on: #14062a; }
+:is(.lowband-demo, .lowband-thumb, .lowband-demo *, .lowband-thumb *).lb-pal--amber { --lb-a: #ffb020; --lb-b: #ff6d4d; --lb-t: #ffc95e; --lb-on: #2a1600; }
+:is(.lowband-demo, .lowband-thumb, .lowband-demo *, .lowband-thumb *).lb-pal--aqua { --lb-a: #2fd6c4; --lb-b: #5c9bff; --lb-t: #7be6d8; --lb-on: #04201c; }
+
+.lowband-demo *, .lowband-demo *::before, .lowband-demo *::after,
+.lowband-thumb *, .lowband-thumb *::before, .lowband-thumb *::after { box-sizing: border-box; }
+
+.lowband-demo {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  background: var(--lb-bg);
+  transition: --lb-a 0.2s, --lb-b 0.2s, --lb-t 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+.lowband-demo :is(h1, h2, h3, h4, p, ul, ol, dl, dd, figure) { margin: 0; padding: 0; }
+.lowband-demo :is(ul, ol) { list-style: none; }
+.lowband-demo :is(h1, h2, h3) { font-weight: 700; letter-spacing: -0.01em; }
+.lowband-demo :is(h1, h2, [tabindex="-1"]):focus { outline: none; }
+.lowband-demo button, .lowband-demo input { font: inherit; color: inherit; }
+.lowband-demo button { cursor: pointer; touch-action: manipulation; }
+.lowband-demo button:disabled { cursor: not-allowed; opacity: 0.4; }
+.lowband-demo a { color: var(--lb-t); }
+.lowband-demo :is(button, a, input, summary):focus-visible { outline: 2px solid var(--lb-t); outline-offset: 2px; border-radius: 10px; }
+.lowband-demo .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.lowband-demo .lb-tint { color: var(--lb-t); }
+
+/* Buttons */
+.lowband-demo .lb-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 20px; border: 0; border-radius: 14px;
+  background: linear-gradient(100deg, var(--lb-a), var(--lb-b)); color: var(--lb-on); font-weight: 700; font-size: 17px;
+  transition: transform 0.12s var(--lb-ease), opacity 0.12s;
+}
+.lowband-demo .lb-btn:active { transform: scale(0.97); opacity: 0.9; }
+.lowband-demo .lb-btn.is-soft { background: var(--lb-raise); color: var(--lb-t); }
+.lowband-demo .lb-text-btn { min-height: 44px; min-width: 44px; padding: 0 8px; border: 0; background: none; color: var(--lb-t); font-size: 17px; font-weight: 400; }
+.lowband-demo .lb-text-btn.is-strong { font-weight: 700; }
+.lowband-demo .lb-text-btn:active { opacity: 0.5; }
+.lowband-demo .lb-icon-btn {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--lb-text);
+  transition: transform 0.12s var(--lb-ease), opacity 0.12s;
+}
+.lowband-demo .lb-icon-btn:active { transform: scale(0.88); opacity: 0.7; }
+.lowband-demo .lb-icon-btn.is-on { color: var(--lb-t); }
+
+/* Artwork over a tinted placeholder */
+.lowband-demo .lb-art, .lowband-thumb .lb-art { position: relative; display: block; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 8px; background: linear-gradient(150deg, var(--lb-a), var(--lb-b)); }
+.lowband-demo .lb-art--empty { background: var(--lb-raise); }
+.lowband-demo .lb-art-ph, .lowband-thumb .lb-art-ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--lb-on); }
+.lowband-demo .lb-art--empty .lb-art-ph { color: var(--lb-muted); }
+.lowband-demo .lb-art-img, .lowband-thumb .lb-art-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lowband-demo .lb-mosaic { display: grid; grid-template-columns: 1fr 1fr; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 8px; }
+.lowband-demo .lb-mosaic .lb-art { border-radius: 0; }
+
+/* Small bits */
+.lowband-demo .lb-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border: 1px solid var(--lb-line); border-radius: 6px; color: var(--lb-muted); font-size: 11px; line-height: 13px; font-weight: 500; white-space: nowrap; }
+.lowband-demo .lb-explicit { display: inline-grid; place-items: center; width: 13px; height: 13px; border-radius: 3px; background: var(--lb-muted); color: var(--lb-bg); font-size: 9px; font-weight: 800; }
+.lowband-demo .lb-switch { position: relative; flex: none; width: 51px; height: 31px; padding: 0; border: 0; border-radius: 16px; background: #4a3c5c; transition: background-color 0.2s; }
+.lowband-demo .lb-switch[aria-checked="true"] { background: linear-gradient(100deg, var(--lb-a), var(--lb-b)); }
+.lowband-demo .lb-switch-knob { position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.3); transition: transform 0.2s var(--lb-ease); }
+.lowband-demo .lb-switch[aria-checked="true"] .lb-switch-knob { transform: translateX(20px); }
+.lowband-demo .lb-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+.lowband-demo .lb-eq i { width: 3px; height: 100%; border-radius: 1px; background: var(--lb-t); transform-origin: bottom; animation: lb-bounce 0.9s ease-in-out infinite; }
+.lowband-demo .lb-eq i:nth-child(2) { animation-delay: -0.3s; }
+.lowband-demo .lb-eq i:nth-child(3) { animation-delay: -0.6s; }
+.lowband-demo .lb-spin { animation: lb-spin 0.9s linear infinite; }
+
+/* Skeleton + empty state */
+.lowband-demo .lb-skel { display: block; border-radius: 6px; background: linear-gradient(100deg, var(--lb-surface) 30%, var(--lb-raise) 50%, var(--lb-surface) 70%); background-size: 220% 100%; animation: lb-shimmer 1.2s linear infinite; }
+.lowband-demo .lb-skel-row { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 16px; }
+.lowband-demo .lb-skel-art { width: 48px; height: 48px; flex: none; }
+.lowband-demo .lb-skel-lines { display: grid; gap: 8px; flex: 1; }
+.lowband-demo .lb-skel-lines .lb-skel { height: 12px; width: 70%; }
+.lowband-demo .lb-skel-lines .lb-skel + .lb-skel { width: 45%; }
+.lowband-demo .lb-empty { display: grid; justify-items: center; gap: 8px; margin: 24px 16px; padding: 28px 20px; border-radius: 16px; text-align: center; background: var(--lb-surface); }
+.lowband-demo .lb-empty h2 { font-size: 17px; line-height: 22px; font-weight: 600; }
+.lowband-demo .lb-empty p { max-width: 280px; color: var(--lb-muted); font-size: 15px; line-height: 20px; }
+.lowband-demo .lb-empty-icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--lb-raise); color: var(--lb-t); }
+.lowband-demo .lb-empty .lb-btn { margin-top: 8px; min-height: 44px; font-size: 15px; }
+
+@keyframes lb-shimmer { to { background-position: -220% 0; } }
+@keyframes lb-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lb-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes lb-spin { to { transform: rotate(360deg); } }
+@keyframes lb-bounce { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lowband-demo *, .lowband-demo *::before, .lowband-demo *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}

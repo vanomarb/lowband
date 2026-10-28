@@ -1,0 +1,67 @@
+/* Mini-player and the Now Playing sheet. Scoped to .lowband-demo. */
+
+.lowband-demo .lb-mini {
+  position: relative; display: flex; align-items: center; gap: 2px; height: 56px; margin: 0 8px 8px; padding: 0 6px 0 0; overflow: hidden;
+  border-radius: 14px; background: rgb(44 34 64 / 0.86); box-shadow: 0 8px 24px rgb(0 0 0 / 0.45);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6); animation: lb-rise 0.24s var(--lb-ease) both;
+}
+.lowband-demo .lb-mini-open { display: flex; flex: 1; align-items: center; gap: 10px; min-width: 0; height: 100%; padding: 0 0 0 8px; border: 0; background: none; text-align: left; }
+.lowband-demo .lb-mini-open:active { opacity: 0.7; }
+.lowband-demo .lb-mini-art { width: 40px; flex: none; border-radius: 6px; }
+.lowband-demo .lb-mini-text { display: grid; min-width: 0; }
+.lowband-demo .lb-mini-text :is(strong, small) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lowband-demo .lb-mini-text strong { font-size: 15px; line-height: 20px; font-weight: 600; }
+.lowband-demo .lb-mini-text small { color: var(--lb-muted); font-size: 13px; line-height: 18px; }
+.lowband-demo .lb-mini-prog { position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: rgb(255 255 255 / 0.12); }
+.lowband-demo .lb-mini-prog i { display: block; height: 100%; background: var(--lb-t); transform-origin: left; transition: transform 0.25s linear; }
+
+/* Now Playing: a full-height sheet that slides up */
+.lowband-demo .lb-player {
+  position: absolute; z-index: 50; inset: 0; display: flex; flex-direction: column; overflow: hidden;
+  padding: calc(var(--sa-t, 0px) + 6px) 0 calc(var(--sa-b, 0px) + 8px);
+  border-radius: 14px 14px 0 0; background: var(--lb-bg); visibility: hidden; transform: translateY(100%);
+  transition: transform 0.38s var(--lb-ease), visibility 0s 0.38s;
+}
+.lowband-demo .lb-player.is-open { visibility: visible; transform: none; transition: transform 0.38s var(--lb-ease), visibility 0s; }
+.lowband-demo .lb-player-bg { position: absolute; inset: -40px; z-index: -1; opacity: 0.55; filter: blur(48px) saturate(1.4); }
+.lowband-demo .lb-player-bg .lb-art { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; }
+.lowband-demo .lb-player::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(12 7 16 / 0.35), rgb(12 7 16 / 0.82) 60%, var(--lb-bg)); }
+.lowband-demo .lb-player-top { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; touch-action: none; }
+.lowband-demo .lb-player-top .lb-grabber { margin: 0; }
+.lowband-demo .lb-player-body { display: flex; flex: 1; flex-direction: column; min-height: 0; padding: 0 24px; }
+.lowband-demo .lb-player-art { display: grid; flex: 1; min-height: 0; place-items: center; padding: 8px 0 16px; }
+.lowband-demo .lb-player-art .lb-art { width: min(100%, 342px); max-height: 100%; aspect-ratio: 1; border-radius: 12px; box-shadow: 0 20px 50px rgb(0 0 0 / 0.55); transform: scale(0.82); transition: transform 0.4s var(--lb-ease); }
+.lowband-demo .lb-player.is-playing .lb-player-art .lb-art { transform: none; }
+.lowband-demo .lb-player-queue { flex: 1; min-height: 0; margin: 0 -24px 12px; overflow-y: auto; overscroll-behavior: contain; }
+.lowband-demo .lb-queue-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px 4px; }
+.lowband-demo .lb-queue-head h3 { font-size: 17px; line-height: 22px; font-weight: 600; }
+.lowband-demo .lb-queue-head h3 span { color: var(--lb-muted); font-weight: 400; }
+.lowband-demo .lb-player-title { display: flex; align-items: center; gap: 8px; }
+.lowband-demo .lb-player-title div { flex: 1; min-width: 0; }
+.lowband-demo .lb-player-title h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 20px; line-height: 25px; font-weight: 700; }
+.lowband-demo .lb-player-artist { display: block; max-width: 100%; padding: 0; border: 0; background: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--lb-muted); font-size: 17px; line-height: 22px; text-align: left; }
+.lowband-demo .lb-player-artist:active { opacity: 0.6; }
+.lowband-demo .lb-like { margin-right: -8px; }
+.lowband-demo .lb-like.is-on { color: var(--lb-t); }
+
+/* Scrubber and volume: thin tracks that grow while dragging */
+.lowband-demo :is(.lb-scrub, .lb-volume) input {
+  width: 100%; height: 28px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer;
+}
+.lowband-demo :is(.lb-scrub, .lb-volume) input::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--lb-text) var(--p), rgb(255 255 255 / 0.22) var(--p)); }
+.lowband-demo :is(.lb-scrub, .lb-volume) input::-moz-range-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--lb-text) var(--p), rgb(255 255 255 / 0.22) var(--p)); }
+.lowband-demo :is(.lb-scrub, .lb-volume) input::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -4px; border: 0; border-radius: 50%; background: var(--lb-text); -webkit-appearance: none; appearance: none; transition: transform 0.12s; }
+.lowband-demo :is(.lb-scrub, .lb-volume) input::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: var(--lb-text); }
+.lowband-demo :is(.lb-scrub, .lb-volume) input:active::-webkit-slider-thumb { transform: scale(1.5); }
+.lowband-demo .lb-scrub { margin-top: 16px; }
+.lowband-demo .lb-scrub-times { display: flex; justify-content: space-between; gap: 8px; color: var(--lb-muted); font-size: 12px; line-height: 16px; font-variant-numeric: tabular-nums; }
+.lowband-demo .lb-scrub-src { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--lb-t); font-weight: 500; }
+.lowband-demo .lb-transport { display: flex; align-items: center; justify-content: space-evenly; margin: 12px 0 8px; }
+.lowband-demo .lb-tbtn { width: 64px; height: 64px; }
+.lowband-demo .lb-tplay { width: 80px; height: 80px; }
+.lowband-demo .lb-volume { display: flex; align-items: center; gap: 4px; color: var(--lb-muted); }
+.lowband-demo .lb-volume .lb-icon-btn { width: 36px; color: var(--lb-muted); }
+.lowband-demo .lb-player-tools { display: flex; justify-content: space-around; margin-top: 8px; }
+.lowband-demo .lb-player-tools .lb-icon-btn { display: inline-flex; gap: 4px; width: auto; min-width: 44px; padding: 0 10px; border-radius: 22px; color: var(--lb-muted); }
+.lowband-demo .lb-player-tools .lb-icon-btn.is-on { color: var(--lb-t); background: rgb(255 255 255 / 0.08); }
+.lowband-demo .lb-player-tools small { font-size: 13px; font-variant-numeric: tabular-nums; }

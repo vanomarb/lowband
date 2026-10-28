@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* No host bar above the product (the shell height subtracts --host-bar). */
+:root {
+  --host-bar: 0px;
+}
+html,
+body {
+  margin: 0;
+}
