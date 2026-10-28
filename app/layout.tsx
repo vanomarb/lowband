@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import * as fonts from "../font";
 import { lowband as meta } from "../meta";
+import { phoneScript } from "../phone";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,6 +17,9 @@ const fontClasses = Object.values(fonts)
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={fontClasses}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: phoneScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

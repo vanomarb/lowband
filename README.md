@@ -2,7 +2,7 @@
 
 > **Concept project** by [Van Omar Benaires](https://github.com/vanomarb): real catalogue data, not a real service.
 
-**Live demo:** [web player](https://vanomarb.github.io/lowband/) and [phone app](https://vanomarb.github.io/lowband/app/) (best at phone width).
+**Live demo:** [web player](https://vanomarb.github.io/lowband/) and [phone app](https://vanomarb.github.io/lowband/app/) (best at phone width). Phones opening the web player link go straight to the phone app.
 
 One library for music that lives on different services.
 
@@ -22,10 +22,10 @@ Captured from the live demo. Album artwork belongs to its owners.
 
 ## What it ships with
 
-- **Web player** at `/`: `Landing.tsx` renders `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. At phone width it links to the phone app.
+- **Web player** at `/`: `Landing.tsx` renders `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. Phones are sent to the phone app; add `?web` to the URL to stay on the web player.
 - **Phone app** at `/app`: `Demo.tsx`, built to feel like a native mobile app, with a fixed nav bar and large titles, a translucent tab bar, sheets, an iOS-like type scale and safe areas.
 
-Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`).
+Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`). `phone.ts` is a small script that runs before the first paint: it detects a phone (a touch screen whose short side is under 600px), sends it from the web player to the phone app, and, if the browser's "Desktop site" mode is on, zooms the phone app back to the phone's real width.
 
 ## What you can try
 

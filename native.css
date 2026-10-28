@@ -6,7 +6,8 @@
   --sa-b: max(var(--safe-bottom, 0px), env(safe-area-inset-bottom));
   --tabbar: calc(49px + var(--sa-b));
   --dock: var(--tabbar);
-  height: calc(100dvh - var(--host-bar, 0px));
+  /* --lb-zoom is set by phone.ts when a phone's "Desktop site" mode has to be zoomed back to phone size. */
+  height: calc((100dvh - var(--host-bar, 0px)) / var(--lb-zoom, 1));
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
