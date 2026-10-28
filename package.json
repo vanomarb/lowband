@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "node scripts/next-dev.mjs -p 3111",
     "build": "next build",
-    "start": "next start -p 3111",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },

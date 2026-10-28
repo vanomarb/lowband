@@ -2,6 +2,8 @@
 
 > **Concept project** by [Van Omar Benaires](https://github.com/vanomarb): real catalogue data, not a real service.
 
+**Live demo:** [web player](https://vanomarb.github.io/lowband/) and [phone app](https://vanomarb.github.io/lowband/app/) (best at phone width).
+
 One library for music that lives on different services.
 
 Lowband is a concept for a music library that sits above Spotify, YouTube Music and Apple Music: search once, see which service has which version of a song, keep playlists that survive when tracks go grey, and hand playback to the service that has it. Why it's shaped this way (catalogue gaps, greyed-out tracks, and platform terms that forbid one player streaming every service) is in [docs/lowband-use-cases.md](docs/lowband-use-cases.md).
@@ -45,16 +47,15 @@ Requires Node.js 20.9 or later.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3111
+npm run dev      # http://localhost:3111/lowband/
 ```
 
-Open [http://localhost:3111](http://localhost:3111) for the web player and [http://localhost:3111/app](http://localhost:3111/app) for the phone app.
+Open [http://localhost:3111/lowband/](http://localhost:3111/lowband/) for the web player and [http://localhost:3111/lowband/app/](http://localhost:3111/lowband/app/) for the phone app. Every route sits under `/lowband` because the site is deployed as a GitHub Pages project page (see Deployment).
 
 Other scripts:
 
 ```bash
-npm run build      # production build
-npm run start      # serve the production build on port 3111
+npm run build      # static export to out/
 npm run lint       # ESLint
 npm run typecheck  # TypeScript, no emit
 ```
@@ -62,6 +63,10 @@ npm run typecheck  # TypeScript, no emit
 `npm run dev` goes through `scripts/next-dev.mjs`, which forces `NODE_ENV=development` so the dev server still runs PostCSS when the shell exports `NODE_ENV=production`. For the same reason, `.npmrc` sets `include=dev` so devDependencies always install.
 
 No API keys or environment variables are needed: the iTunes Search API and the Deezer API are both public.
+
+## Deployment
+
+The app is a static export (`output: 'export'` with `basePath: '/lowband'` in `next.config.mjs`). Every push to `main` runs `.github/workflows/deploy.yml`, which builds `out/` and deploys it to GitHub Pages at https://vanomarb.github.io/lowband/. To preview a build locally, serve `out/` from a folder named `lowband` so the paths match.
 
 ## Structure
 
