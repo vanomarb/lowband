@@ -76,8 +76,8 @@ export const lowband: ShowcaseMeta = {
       { label: "Playlists", value: String(seed.playlists.length) },
     ],
     rows: [
-      { primary: row("1623677811").title, secondary: `${row("1623677811").artist} · 30-sec preview`, badge: { label: "Playing", tone: "positive" } },
-      { primary: row("1440718584").title, secondary: `${row("1440718584").artist} · Liked` },
+      { primary: row(seed.current!).title, secondary: `${row(seed.current!).artist} · 30-sec preview`, badge: { label: "Playing", tone: "positive" } },
+      { primary: row(seed.liked[0]).title, secondary: `${row(seed.liked[0]).artist} · Liked` },
       { primary: "Connected services", secondary: "Spotify, YouTube Music, Apple Music", badge: { label: "Concept", tone: "accent" } },
     ],
   },

@@ -4,7 +4,6 @@ import type { Palette, Track } from "./types";
 export const PREVIEW_LABEL = "30-sec preview";
 export const SOURCE_NAME = "iTunes Search API";
 export const PREVIEW_SECONDS = 30;
-export const FIXTURE_DATE = "2026-10-27";
 
 /** Square artwork at any size the CDN serves, e.g. 600 gives ".../600x600bb.jpg". */
 export const artUrl = (t: Pick<Track, "artwork">, px: number) => `${t.artwork}/${px}x${px}bb.jpg`;

@@ -23,18 +23,20 @@ function Card({ s, d, t, list }: { s: State; d: D; t: Track; list: string[] }) {
 }
 
 export function HomeScreen({ s, d, today }: ScreenProps) {
-  const pick = s.tracks["1440718584"];
+  // The first shelf is "Today's pick": this week's most-played song leads it.
+  const [hero, ...shelves] = SHELVES;
+  const pick = s.tracks[hero.ids[0]];
   const recent = s.recent.map((id) => s.tracks[id]).filter(Boolean);
   return (
     <Page title="Listen Now">
       <p className="lb-dateline">{longDate(today)}</p>
       {pick && (
-        <button type="button" className={`lb-hero lb-pal--${paletteOf(pick.id)}`} onClick={() => d({ type: "PLAY_LIST", ids: SHELVES[1].ids })}>
+        <button type="button" className={`lb-hero lb-pal--${paletteOf(pick.id)}`} onClick={() => d({ type: "PLAY_LIST", ids: hero.ids })}>
           <Art track={pick} px={600} className="lb-hero-art" priority />
           <span className="lb-hero-text">
             <small>Today’s pick</small>
-            <strong>{SHELVES[1].title}</strong>
-            <span>{SHELVES[1].note}. Starts with {pick.artist}.</span>
+            <strong>{hero.title}</strong>
+            <span>{hero.note}. Starts with {pick.title} by {pick.artist}.</span>
           </span>
           <span className="lb-hero-play" aria-hidden="true"><Icon name="play" size={20} weight="fill" /> Play</span>
         </button>
@@ -44,7 +46,7 @@ export function HomeScreen({ s, d, today }: ScreenProps) {
           <ul className="lb-shelf">{recent.slice(0, 8).map((t) => <Card key={t.id} s={s} d={d} t={t} list={s.recent} />)}</ul>
         </Section>
       )}
-      {SHELVES.filter((sh) => sh.id !== "focus").map((sh) => (
+      {shelves.map((sh) => (
         <Section key={sh.id} id={`h-${sh.id}`} title={sh.title}>
           <p className="lb-section-note">{sh.note}</p>
           <ul className="lb-shelf">{sh.ids.map((id) => s.tracks[id]).filter(Boolean).map((t) => <Card key={t.id} s={s} d={d} t={t} list={sh.ids} />)}</ul>
@@ -62,7 +64,7 @@ export function HomeScreen({ s, d, today }: ScreenProps) {
           ))}
         </ul>
       </Section>
-      <p className="lb-footnote">Every song here is a real track from the iTunes Search API, playing its 30-second preview. Lowband is a concept: it does not stream from Spotify, YouTube Music or Apple Music.</p>
+      <p className="lb-footnote">Every song here is on this week’s Apple Music charts, playing its 30-second preview from the iTunes Search API. Lowband is a concept: it does not stream from Spotify, YouTube Music or Apple Music.</p>
     </Page>
   );
 }

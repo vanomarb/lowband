@@ -6,6 +6,7 @@ import "./player.css";
 import "./screens.css";
 import { useEffect, useRef } from "react";
 import type { DemoProps } from "./types";
+import { CAPTURED } from "./data/catalog";
 import { useBackGesture } from "./hooks/useBackGesture";
 import { inertProps } from "./components/Bits";
 import { FullPlayer } from "./components/FullPlayer";
@@ -82,6 +83,6 @@ function App({ today, homeHref }: { today: string; homeHref: string }) {
   );
 }
 
-export default function Demo({ today = "2026-10-27", resetKey = 0, homeHref = "/" }: DemoProps) {
+export default function Demo({ today = CAPTURED, resetKey = 0, homeHref = "/" }: DemoProps) {
   return <App key={resetKey} today={today} homeHref={homeHref} />;
 }

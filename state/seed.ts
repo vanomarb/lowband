@@ -1,15 +1,34 @@
-import { seedTracks } from "../data/catalog";
+import { SHELVES, seedTracks } from "../data/catalog";
 import type { State } from "./types";
 
-/** The demo's starting library on 27 October 2026. Every id is in the captured snapshot. */
+const all = [...new Set(SHELVES.flatMap((s) => s.ids))];
+const shelf = (id: string) => SHELVES.find((s) => s.id === id)?.ids ?? all;
+
+/** Takes `count` ids round-robin from several lists, without repeats, so the library mixes the shelves. */
+function mix(lists: string[][], count: number) {
+  const out: string[] = [];
+  for (let i = 0; out.length < count && lists.some((l) => i < l.length); i++) {
+    for (const list of lists) {
+      const id = list[i];
+      if (id && !out.includes(id) && out.length < count) out.push(id);
+    }
+  }
+  return out;
+}
+
+/**
+ * The demo's starting library, built from this week's shelves (data/tracks.ts is regenerated from the charts),
+ * so every id exists and the library always shows current music.
+ */
 export function initialState(): State {
+  const top = shelf("top"), fresh = shelf("new"), world = shelf("world"), ph = shelf("ph"), kr = shelf("kr");
   return {
     tab: "home",
     stacks: { home: [], search: [], library: [], settings: [] },
     tracks: seedTracks,
     query: "",
     scope: "songs",
-    current: "1623677811",
+    current: top[0],
     playing: false,
     buffering: false,
     pos: 0,
@@ -20,14 +39,14 @@ export function initialState(): State {
     muted: false,
     sleep: { mode: "off" },
     autoplay: true,
-    queue: ["1657231962", "1386337708", "1593185593"],
+    queue: top.slice(1, 4),
     history: [],
-    recent: ["1623677811", "1453571333", "268443097", "1469575900", "1505498792", "573377330"],
-    liked: ["1440718584", "1625058461", "1485064658", "1422648513", "1714304939", "1532252603"],
+    recent: mix([top, world, fresh, ph, kr], 6),
+    liked: mix([fresh, world.slice(1), ph.slice(2), kr.slice(2)], 6),
     playlists: [
-      { id: "pl-sunday", name: "Sunday morning", tracks: ["1625058461", "1469581442", "1299241645", "573377330", "1542294553", "1469575900"] },
-      { id: "pl-focus", name: "Deep focus", tracks: ["1453571333", "1440718584", "381515553", "1169246072", "1447486980", "1714304939"] },
-      { id: "pl-kitchen", name: "Kitchen dance party", tracks: ["1422648513", "617154366", "1538003843", "1817217063", "1593185593", "1444872841", "1623677811"] },
+      { id: "pl-repeat", name: "On repeat", tracks: top.slice(0, 6) },
+      { id: "pl-world", name: "World tour", tracks: world.slice(0, 6) },
+      { id: "pl-fresh", name: "Fresh finds", tracks: fresh.slice(0, 6) },
     ],
     playlistSeq: 0,
     shuffleSeq: 0,

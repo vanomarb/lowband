@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Rebuild every Monday so the catalogue follows this week's charts.
+  schedule:
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: read
@@ -24,6 +27,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Reads Apple Music's current charts into data/tracks.ts. If Apple is unreachable, the committed catalogue is used.
+      - name: Refresh the catalogue from this week's charts
+        run: node scripts/refresh-catalog.mjs
+        continue-on-error: true
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

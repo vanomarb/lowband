@@ -31,3 +31,6 @@ export type Artist = { id: string; name: string; genre: string };
 
 export type Palette = "magenta" | "coral" | "orchid" | "amber" | "aqua";
 export type Service = "spotify" | "youtube" | "apple";
+
+/** A row of songs on Home. Generated with the catalogue (data/tracks.ts); every id is in the snapshot. */
+export type Shelf = { id: string; title: string; note: string; ids: string[] };

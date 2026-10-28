@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { clock, CONCEPT_LINE, COUNTRIES, SERVICES, SNAPSHOT } from "../data/catalog";
+import { CAPTURED, clock, CONCEPT_LINE, COUNTRIES, longDate, SERVICES, SNAPSHOT } from "../data/catalog";
 import { Switch } from "../components/Bits";
 import { Icon } from "../components/Icon";
 import { Page, useLayout } from "../components/Page";
@@ -31,7 +31,7 @@ export function SettingsScreen({ s, d, homeHref }: ScreenProps & { homeHref?: st
       <h2 className="lb-group-title">About this demo</h2>
       <ul className="lb-group">
         <li className="lb-cell"><span className="lb-cell-label">Catalogue</span><span className="lb-cell-detail">iTunes Search API</span></li>
-        <li className="lb-cell"><span className="lb-cell-label">Offline snapshot</span><span className="lb-cell-detail">{SNAPSHOT.length} songs · {COUNTRIES} countries</span></li>
+        <li className="lb-cell"><span className="lb-cell-label">Offline snapshot</span><span className="lb-cell-detail">{SNAPSHOT.length} songs · {COUNTRIES} countries · charts of {longDate(CAPTURED)}</span></li>
         <li className="lb-cell"><span className="lb-cell-label">What plays</span><span className="lb-cell-detail">30-second previews</span></li>
       </ul>
       {layout === "phone" && (

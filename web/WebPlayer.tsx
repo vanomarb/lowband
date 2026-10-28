@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { FIXTURE_DATE, paletteOf } from "../data/catalog";
+import { CAPTURED, paletteOf } from "../data/catalog";
 import { LayoutContext } from "../components/Page";
 import { QueueList } from "../components/QueueList";
 import { Sheets } from "../components/Sheets";
@@ -63,7 +63,7 @@ export default function WebPlayer({ appHref }: { appHref: string }) {
       <div className={`lowband-demo lowband-web lb-pal--${s.current ? paletteOf(s.current) : "magenta"}`} data-side={side === null ? "auto" : side ? "open" : "closed"}>
         <Rail s={s} d={d} appHref={appHref} />
         <main ref={mainRef} className="lbw-main">
-          <Screen s={s} d={d} today={FIXTURE_DATE} searchRef={searchRef} />
+          <Screen s={s} d={d} today={CAPTURED} searchRef={searchRef} />
           <footer className="lbw-footer">
             <p>Lowband is a concept: one player for the music people already stream. Songs and 30-second previews come from the public iTunes Search API; no Spotify, YouTube Music or Apple Music account is connected.</p>
             <p>Shortcuts: Space or K play/pause · J/L 5 seconds · N/P next/previous · / search.</p>
