@@ -56,6 +56,8 @@ export type DemoProps = {
 };
 
 export type LandingProps = {
-  /** Where "Open the app" goes: the full-screen phone app page. */
+  /** The player on one address: the web player on desktops, the phone app on phones. */
+  playHref: string;
+  /** The phone app on any screen. */
   appHref: string;
 };

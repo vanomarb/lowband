@@ -3,7 +3,7 @@
 For the product introduction, see [README.md](README.md).
 
 
-**Live demo:** https://vanomarb.github.io/lowband/ shows the phone app on phones and the web player everywhere else, opens the phone app on any screen.
+**Live demo:** https://vanomarb.github.io/lowband/ is the landing page; https://vanomarb.github.io/lowband/play/ shows the phone app on phones and the web player everywhere else; https://vanomarb.github.io/lowband/app/ opens the phone app on any screen.
 
 One library for music that lives on different services.
 
@@ -17,16 +17,17 @@ This demo is a phone app and a desktop web player. It searches and plays 30-seco
 
 | Listen Now | Full player | Where it plays |
 | :---: | :---: | :---: |
-| <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Last Last by Burna Boy, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as sped up or cover"> |
+| <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Multo by Cup of Joe, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as another take, live or cover"> |
 
 Captured from the live demo. Album artwork belongs to its owners.
 
 ## What it ships with
 
-- **Web player** at `/`: `Landing.tsx` renders `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. On phones, the same address shows the phone app instead.
-- **Phone app** on phones at `/`, and on any screen at `/app`: `Demo.tsx`, built to feel like a native mobile app, with a fixed nav bar and large titles, a translucent tab bar, sheets, an iOS-like type scale and safe areas.
+- **Landing page** at `/`: `Landing.tsx` and `landing.css`, the product page with links into the player. Its screenshots live in `public/shots/`.
+- **Web player** at `/play`: `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. On phones, the same address shows the phone app instead.
+- **Phone app** on phones at `/play`, and on any screen at `/app`: `Demo.tsx`, built to feel like a native mobile app, with a fixed nav bar and large titles, a translucent tab bar, sheets, an iOS-like type scale and safe areas.
 
-Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`). `phone.ts` is a small script that runs before the first paint: it detects a phone (a touch screen narrower than 600px, measured from the screen and the zoomed visible width so "Desktop site" mode can't hide it), so `app/page.tsx` can choose the layout, and in "Desktop site" mode it zooms the phone app back to the phone's real width.
+Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`). `phone.ts` is a small script that runs before the first paint: it detects a phone (a touch screen narrower than 600px, measured from the screen and the zoomed visible width so "Desktop site" mode can't hide it), so `app/play/page.tsx` can choose the layout, and in "Desktop site" mode it zooms the phone app back to the phone's real width.
 
 ## What you can try
 
@@ -62,7 +63,7 @@ npm install
 npm run dev      # http://localhost:3111/lowband/
 ```
 
-Open [http://localhost:3111/lowband/](http://localhost:3111/lowband/) for the web player and [http://localhost:3111/lowband/app/](http://localhost:3111/lowband/app/) for the phone app. Every route sits under `/lowband` because the site is deployed as a GitHub Pages project page (see Deployment).
+Open [http://localhost:3111/lowband/](http://localhost:3111/lowband/) for the landing page, [http://localhost:3111/lowband/play/](http://localhost:3111/lowband/play/) for the web player and [http://localhost:3111/lowband/app/](http://localhost:3111/lowband/app/) for the phone app. Every route sits under `/lowband` because the site is deployed as a GitHub Pages project page (see Deployment).
 
 Other scripts:
 
@@ -84,9 +85,9 @@ To preview a build locally, serve `out/` from a folder named `lowband` so the pa
 
 ```text
 lowband/
-  app/           Next.js routes: / (web player) and /app (phone app)
+  app/           Next.js routes: / (landing), /play (web player, or the phone app on phones) and /app (phone app)
   Demo.tsx       the phone app
-  Landing.tsx    the web player entry (renders web/)
+  Landing.tsx    the landing page (styles in landing.css, screenshots in public/shots/)
   meta.ts        product copy: summary, use cases, key decisions; also feeds the page title
   types.ts       shared prop and metadata types
   data/          types, the iTunes and Deezer clients, this week's chart snapshot and shelves (generated), and search categories
@@ -97,7 +98,7 @@ lowband/
   web/           WebPlayer, Rail, PlayerBar
   docs/          research behind the use cases
   scripts/       next-dev.mjs
-  theme.css native.css player.css screens.css web.css
+  theme.css native.css player.css screens.css web.css landing.css
 ```
 
 ## References

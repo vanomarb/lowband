@@ -2,13 +2,13 @@
 
 Lowband is a music library and preview player for listeners who want to explore songs and see where recordings are available. It has a desktop web player and a phone app layout.
 
-[Open Lowband](https://vanomarb.github.io/lowband/) on any device, or [open the phone layout](https://vanomarb.github.io/lowband/app/) on any screen.
+[Visit Lowband](https://vanomarb.github.io/lowband/), [open the player](https://vanomarb.github.io/lowband/play/) (the phone app on phones, the web player everywhere else), or [open the phone layout](https://vanomarb.github.io/lowband/app/) on any screen.
 
 ![The desktop web player: library rail, Listen Now with today's pick and recently played, the Up next panel and the player bar](docs/screenshots/web-player.png)
 
 | Listen Now | Full player | Where it plays |
 | :---: | :---: | :---: |
-| <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Last Last by Burna Boy, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as sped up or cover"> |
+| <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Multo by Cup of Joe, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as another take, live or cover"> |
 
 Screenshots from the live site. Album artwork belongs to its owners.
 

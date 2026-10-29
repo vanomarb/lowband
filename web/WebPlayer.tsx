@@ -1,5 +1,10 @@
 "use client";
 
+import "../theme.css";
+import "../native.css";
+import "../player.css";
+import "../screens.css";
+import "../web.css";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { CAPTURED, paletteOf } from "../data/catalog";
 import { LayoutContext } from "../components/Page";
