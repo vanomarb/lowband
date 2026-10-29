@@ -1,16 +1,8 @@
-# Lowband · Music player
+# Lowband
 
-> **Concept project** by [Van Omar Benaires](https://github.com/vanomarb): real catalogue data, not a real service.
+Lowband is a music library and preview player for listeners who want to explore songs and see where recordings are available. It has a desktop web player and a phone app layout.
 
-**Live demo:** https://vanomarb.github.io/lowband/ shows the phone app on phones and the web player everywhere else. [/app/](https://vanomarb.github.io/lowband/app/) opens the phone app on any screen.
-
-One library for music that lives on different services.
-
-Lowband is a concept for a music library that sits above Spotify, YouTube Music and Apple Music: search once, see which service has which version of a song, keep playlists that survive when tracks go grey, and hand playback to the service that has it. Why it's shaped this way (catalogue gaps, greyed-out tracks, and platform terms that forbid one player streaming every service) is in [docs/lowband-use-cases.md](docs/lowband-use-cases.md).
-
-This demo is a phone app and a desktop web player. It searches and plays 30-second previews from the public [iTunes Search API](https://performance-partners.apple.com/search-api) as a stand-in for the connected services. Connecting Spotify, YouTube Music or Apple Music is shown as a labelled concept, and no account is ever connected.
-
-## Screenshots
+[Open Lowband](https://vanomarb.github.io/lowband/) on any device, or [open the phone layout](https://vanomarb.github.io/lowband/app/) on any screen.
 
 ![The desktop web player: library rail, Listen Now with today's pick and recently played, the Up next panel and the player bar](docs/screenshots/web-player.png)
 
@@ -18,91 +10,30 @@ This demo is a phone app and a desktop web player. It searches and plays 30-seco
 | :---: | :---: | :---: |
 | <img src="docs/screenshots/phone-home.png" width="250" alt="Phone app home screen with today's pick and recently played"> | <img src="docs/screenshots/phone-player.png" width="250" alt="Full player for Last Last by Burna Boy, labelled as a 30-second iTunes preview"> | <img src="docs/screenshots/phone-where-it-plays.png" width="250" alt="Where it plays sheet: the same recording on Apple Music and Deezer, search hand-offs to Spotify and YouTube Music, and other versions tagged as sped up or cover"> |
 
-Captured from the live demo. Album artwork belongs to its owners.
+Screenshots from the live site. Album artwork belongs to its owners.
 
-## What it ships with
+## What you can do
 
-- **Web player** at `/`: `Landing.tsx` renders `web/WebPlayer.tsx`, a desktop app with a library rail, a persistent player bar and an Up next panel. On phones, the same address shows the phone app instead.
-- **Phone app** on phones at `/`, and on any screen at `/app`: `Demo.tsx`, built to feel like a native mobile app, with a fixed nav bar and large titles, a translucent tab bar, sheets, an iOS-like type scale and safe areas.
+- Search songs, albums and artists, then listen to labelled 30-second previews.
+- Browse album tracklists, artist pages with top songs and albums, and chart-based music shelves.
+- Open “Where it plays” to find Apple Music links, live Deezer matches and other versions, or search Spotify and YouTube Music.
+- Like songs, view recently played, and create, rename, delete and edit playlists, with undo.
+- Manage Up next, adjust volume, and set a sleep timer that fades out playback.
+- On phones, drag the full player or sheets down to close them and use the system back gesture to return through screens.
 
-Both use the same data, reducer, screens and audio engine (`hooks/useLowband.ts`). `phone.ts` is a small script that runs before the first paint: it detects a phone (a touch screen narrower than 600px, measured from the screen and the zoomed visible width so "Desktop site" mode can't hide it), so `app/page.tsx` can choose the layout, and in "Desktop site" mode it zooms the phone app back to the phone's real width.
+Your library, playlists and settings live in memory and reset when you reload.
 
-## What you can try
+## Where the data comes from
 
-- Real audio: every song plays its 30-second preview, labelled as a preview wherever the source is shown
-- Search with a Songs / Albums / Artists switch, live against the iTunes Search API, with loading, empty and error states (songs fall back to the saved snapshot offline)
-- Where it plays, from any song's ⋯ menu: Apple Music (this catalogue), Deezer checked live through its public API with the same recording separated from covers, remixes, sped-up edits and live takes, and search hand-offs to Spotify and YouTube Music, which can't be checked without an account
-- Album pages with the tracklist in disc order, and artist pages with top songs and albums; reach them from search, the track menu ("Go to album", "Go to artist") or the artist name in the full player
-- Liked songs, recently played, and playlists you can create, rename, delete and edit, with undo
-- Mini-player that opens a full player with Up next, volume and a sleep timer that fades out
-- Phone gestures: drag the full player or any sheet down to close it, and the system back gesture steps back through screens, the player and sheets instead of leaving the app
-- Settings with Connected services as concept toggles: nothing is signed in
+- Search, album and artist lookups, song details, artwork and real audio previews come from the public [iTunes Search API](https://performance-partners.apple.com/search-api). Song search falls back to a saved catalogue snapshot if the API cannot be reached; this does not make audio available offline.
+- The snapshot uses Apple Music’s most-played charts from 12 countries. Songs are looked up in iTunes for previews, artwork and length; only clean songs with previews are kept. It supplies the starting library, Home’s date and shelves for top songs, new releases, country picks, the Philippines and South Korea. Deployment attempts to refresh it before each build and every Monday, keeping the saved copy if Apple cannot be reached.
+- “Where it plays” uses this catalogue for Apple Music and checks the public [Deezer API](https://developers.deezer.com/api) live. Deezer matches use artist, title and length within three seconds. Labels for covers, remixes, sped-up edits and live versions use keyword guesses, not recording identifiers (ISRCs). Spotify and YouTube Music links open searches; their availability cannot be checked without an account.
+- Connected-service switches for Spotify, YouTube Music and Apple Music are simulated preferences. No account is connected. All playback uses iTunes previews as a stand-in; Lowband does not stream full songs from these services.
 
-State lives in memory and resets when you reload.
-
-## Data: what is real
-
-- **Catalogue**: `data/itunes.ts` calls `search` (songs, albums, artists) and `lookup` (an artist's songs and albums, an album's tracklist). No key, CORS-enabled. Snapshot tracks have no iTunes ids, so their artist and album pages search by name and keep exact matches.
-- **This week's music**: `data/tracks.ts` is generated by `scripts/refresh-catalog.mjs` from Apple Music's most-played charts in 12 countries, with each song looked up in the iTunes Search API for its preview, artwork and length (clean songs only). It drives Home's shelves (top songs, new releases, the #1 in each country, the Philippines and South Korea), the starting library and the date shown on Home. The deploy workflow regenerates it before every build and every Monday, so the demo keeps up with the charts without a server; if Apple is unreachable, the committed copy is used.
-- **Engine**: `hooks/useAudioEngine.ts` owns one `HTMLAudioElement` and treats it as the source of truth: `timeupdate` drives position, `loadedmetadata` the duration, `waiting`/`playing` buffering, `ended` advances Up next, `error` stops with a toast. A blocked autoplay shows a toast. Media Session metadata and actions are set. The element is exposed as `window.__lowbandAudio` for inspection.
-- **Where it plays**: `data/deezer.ts` searches the public Deezer API (no key; JSONP, because Deezer sends no CORS header) and sorts results by artist, title and length within three seconds. Version kinds are a keyword heuristic, labelled as such; a real build would match the ISRC first.
-
-## What is not real
-
-- **Connected services**: Spotify, YouTube Music and Apple Music appear as text-only concept toggles. Nothing signs in.
-- **Full-length playback**: the iTunes Search API only serves 30-second previews, and Lowband never implies otherwise.
-
-## Getting started
-
-Requires Node.js 20.9 or later.
-
-```bash
-npm install
-npm run dev      # http://localhost:3111/lowband/
-```
-
-Open [http://localhost:3111/lowband/](http://localhost:3111/lowband/) for the web player and [http://localhost:3111/lowband/app/](http://localhost:3111/lowband/app/) for the phone app. Every route sits under `/lowband` because the site is deployed as a GitHub Pages project page (see Deployment).
-
-Other scripts:
-
-```bash
-npm run build      # static export to out/
-npm run lint       # ESLint
-npm run typecheck  # TypeScript, no emit
-```
-
-`npm run dev` goes through `scripts/next-dev.mjs`, which forces `NODE_ENV=development` so the dev server still runs PostCSS when the shell exports `NODE_ENV=production`. For the same reason, `.npmrc` sets `include=dev` so devDependencies always install.
-
-No API keys or environment variables are needed: the iTunes Search API and the Deezer API are both public.
-
-## Deployment
-
-The app is a static export (`output: 'export'` with `basePath: '/lowband'` in `next.config.mjs`). Every push to `main` runs `.github/workflows/deploy.yml`, which builds `out/` and deploys it to GitHub Pages at https://vanomarb.github.io/lowband/. To preview a build locally, serve `out/` from a folder named `lowband` so the paths match.
-
-## Structure
-
-```text
-lowband/
-  app/           Next.js routes: / (web player) and /app (phone app)
-  Demo.tsx       the phone app
-  Landing.tsx    the web player entry (renders web/)
-  meta.ts        product copy: summary, use cases, key decisions; also feeds the page title
-  types.ts       shared prop and metadata types
-  data/          types, the iTunes and Deezer clients, this week's chart snapshot and shelves (generated), and search categories
-  state/         reducer split into playback.ts and library.ts; seed.ts is the first state
-  hooks/         useLowband (shared core), useAudioEngine, useSearch, useLookup, useSwipe
-  screens/       Home, Search, Library, Settings, Collection, Album, Artist, Router
-  components/    Page (nav bar + scroll region), Art, TrackRow, Music (album/artist rows), players, sheets
-  web/           WebPlayer, Rail, PlayerBar
-  docs/          research behind the use cases
-  scripts/       next-dev.mjs
-  theme.css native.css player.css screens.css web.css
-```
-
-## References
-
-Patterns, data sources and what was deliberately not copied are listed in [REFERENCES.md](REFERENCES.md). No service logo or brand asset appears in the app.
+Both APIs are public and require no key. Song data, artwork and previews belong to their owners. See [REFERENCES.md](REFERENCES.md) for source terms and design attributions.
 
 ## Disclaimer
 
-Lowband is a concept, not a real service. Song data, artwork and previews come from the public iTunes Search API and belong to their owners. Spotify, YouTube Music, Apple Music and Deezer are trademarks of their respective owners, and this project is not affiliated with any of them.
+Lowband provides preview playback, not a connected streaming service. Spotify, YouTube Music, Apple Music and Deezer are trademarks of their respective owners. Lowband is not affiliated with any of them.
+
+Running it locally or contributing? See [DEVELOPMENT.md](DEVELOPMENT.md).
